@@ -61,7 +61,8 @@ class PayloadRepository(private val context: Context) {
         onProgress(context.getString(R.string.repo_downloading, label))
         val temporary = File(destination.parentFile, "${destination.name}.part")
         val connection = open(artifact.url)
-        require(connection.contentLengthLong == -1L || connection.contentLengthLong == artifact.size) {
+        val skipSizeCheck = artifact.size == 0L
+        require(skipSizeCheck || connection.contentLengthLong == -1L || connection.contentLengthLong == artifact.size) {
             context.getString(R.string.repo_size_mismatch, label)
         }
         var total = 0L
@@ -72,7 +73,7 @@ class PayloadRepository(private val context: Context) {
                     val count = input.read(buffer)
                     if (count < 0) break
                     total += count
-                    require(total <= artifact.size) {
+                    require(skipSizeCheck || total <= artifact.size) {
                         context.getString(R.string.repo_size_exceeded, label)
                     }
                     output.write(buffer, 0, count)
@@ -81,7 +82,7 @@ class PayloadRepository(private val context: Context) {
             }
         }
         connection.disconnect()
-        require(total == artifact.size) { context.getString(R.string.repo_incomplete, label) }
+        require(skipSizeCheck || total == artifact.size) { context.getString(R.string.repo_incomplete, label) }
         if (destination.exists()) destination.delete()
         require(temporary.renameTo(destination)) {
             context.getString(R.string.repo_finalize_failed, label)
@@ -137,9 +138,9 @@ class PayloadRepository(private val context: Context) {
 
     companion object {
         private const val COMMIT_API_URL =
-            "https://api.github.com/repos/BuSung-dev/Root-My-Galaxy-Payloads/git/ref/heads/main"
+            "https://api.github.com/repos/IslamIssa1997/ksu-next-s938n/git/ref/heads/main"
         private const val RAW_REPOSITORY =
-            "https://raw.githubusercontent.com/BuSung-dev/Root-My-Galaxy-Payloads"
+            "https://raw.githubusercontent.com/IslamIssa1997/ksu-next-s938n"
         private const val MUTABLE_RAW_PREFIX = "$RAW_REPOSITORY/main/"
         private const val MAX_COMMIT_RESPONSE_BYTES = 16 * 1024
         private const val MAX_MANIFEST_BYTES = 256 * 1024
