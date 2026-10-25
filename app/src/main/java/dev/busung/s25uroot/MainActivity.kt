@@ -245,10 +245,9 @@ private val languageOptions = listOf(
     LanguageOption(R.string.language_uzbek, "uz"),
 )
 
-private const val KERNEL_SU_MANAGER_URL =
-    "https://github.com/tiann/KernelSU/releases/download/v3.2.5/KernelSU_v3.2.5_32525-release.apk"
-private const val KERNEL_SU_MANAGER_PACKAGE = "me.weishu.kernelsu"
-private const val KERNEL_SU_HOME_URL = "https://kernelsu.org/"
+private const val KERNEL_SU_MANAGER_URL = "https://t.me/ksunext"
+private const val KERNEL_SU_MANAGER_PACKAGE = "com.rifsxd.ksunext"
+private const val KERNEL_SU_HOME_URL = "https://t.me/ksunext"
 private const val SHIZUKU_MANAGER_PACKAGE = "moe.shizuku.manager"
 private const val SHIZUKU_MANAGER_URL = "https://github.com/thedjchi/Shizuku/releases/"
 
