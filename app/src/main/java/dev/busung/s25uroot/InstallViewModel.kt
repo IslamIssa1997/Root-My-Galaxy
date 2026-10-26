@@ -317,6 +317,7 @@ class InstallViewModel(application: Application) : AndroidViewModel(application)
         if (shizukuEnabled()) {
             shizukuStage(payloads.kernelSu, SHIZUKU_KSUD_PATH, "755")
             shizukuStage(payloads.kernelSu, SHIZUKU_KSUD_STAGE_PATH, "755")
+            ShizukuController.exec(arrayOf("rm", "-f", KSUD_INSTALL_PATH)).waitFor()
             shizukuStage(payloads.kernelSu, KSUD_INSTALL_PATH, "755")
             appendLog(app.getString(R.string.log_ksu_staged))
         } else {
@@ -324,6 +325,7 @@ class InstallViewModel(application: Application) : AndroidViewModel(application)
             val stageCommand =
                 "/system/bin/cp $source $SHIZUKU_KSUD_PATH && " +
                     "/system/bin/cp $source $SHIZUKU_KSUD_STAGE_PATH && " +
+                    "rm -f $KSUD_INSTALL_PATH && " +
                     "/system/bin/cp $source $KSUD_INSTALL_PATH && " +
                     "/system/bin/chmod 755 $SHIZUKU_KSUD_PATH $SHIZUKU_KSUD_STAGE_PATH $KSUD_INSTALL_PATH"
             val stage = runHelper("-c", stageCommand)
