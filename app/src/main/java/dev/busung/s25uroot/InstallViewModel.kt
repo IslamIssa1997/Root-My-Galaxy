@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.InputStream
+import java.security.MessageDigest
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
@@ -314,6 +315,12 @@ class InstallViewModel(application: Application) : AndroidViewModel(application)
     }
 
     private suspend fun installKernelSu(payloads: VerifiedPayloads) {
+        val md5 = MessageDigest.getInstance("MD5")
+            .digest(payloads.kernelSu.readBytes())
+            .joinToString("") { "%02x".format(it) }
+            .take(8)
+        appendLog("[*] ksud payload md5: $md5 (${payloads.kernelSu.length()} bytes)")
+
         if (shizukuEnabled()) {
             shizukuStage(payloads.kernelSu, SHIZUKU_KSUD_PATH, "755")
             shizukuStage(payloads.kernelSu, SHIZUKU_KSUD_STAGE_PATH, "755")
