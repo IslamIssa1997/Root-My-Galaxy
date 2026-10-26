@@ -185,6 +185,7 @@ class InstallViewModel(application: Application) : AndroidViewModel(application)
                 finishHistory(InstallRunResult.Failed)
             } finally {
                 activeRunShizuku = null
+                cleanStagedFiles()
             }
         }
     }
@@ -479,7 +480,10 @@ class InstallViewModel(application: Application) : AndroidViewModel(application)
             SHIZUKU_KSUD_STAGE_PATH,
             SHIZUKU_PAYLOAD_PATH,
             SHIZUKU_HELPER_PATH,
+            SHIZUKU_LOG_PATH,
         ).forEach { path -> runCatching { File(path).delete() } }
+        runCatching { File(app.filesDir, "payloads").deleteRecursively() }
+        runCatching { File(app.filesDir, "exploit.log").delete() }
     }
 
     private fun shellQuote(value: String) = "'${value.replace("'", "'\\''")}'"
