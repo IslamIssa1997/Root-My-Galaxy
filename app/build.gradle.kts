@@ -7,6 +7,15 @@ android {
     namespace = "dev.busung.s25uroot"
     compileSdk = 37
 
+    signingConfigs {
+        getByName("debug") {
+            storeFile = rootProject.file("ci-debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
+    }
+
     defaultConfig {
         applicationId = "dev.busung.s25uroot"
         minSdk = 33
