@@ -342,7 +342,6 @@ class InstallViewModel(application: Application) : AndroidViewModel(application)
         }
         if (lateLoad.output.isNotBlank()) appendLog(lateLoad.output)
         storeInstallReceipt()
-        restartAdbd()
         appendLog(app.getString(R.string.log_ksu_control_verified))
     }
 
@@ -470,14 +469,6 @@ class InstallViewModel(application: Application) : AndroidViewModel(application)
                 delay(500.milliseconds)
                 if (process.isAlive) process.destroyForcibly()
             }
-        }
-    }
-
-    private suspend fun restartAdbd() {
-        appendLog("[*] Restarting adbd for adb_root LD_PRELOAD injection")
-        val result = runHelper("-c", "stop adbd; start adbd")
-        if (result.code != 0 && result.output.isNotBlank()) {
-            appendLog("[!] adbd restart: ${result.output}")
         }
     }
 
