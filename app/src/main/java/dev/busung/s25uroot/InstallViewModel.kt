@@ -481,6 +481,7 @@ class InstallViewModel(application: Application) : AndroidViewModel(application)
             SHIZUKU_PAYLOAD_PATH,
             SHIZUKU_HELPER_PATH,
             SHIZUKU_LOG_PATH,
+            TEMP_SU_SOCK_PATH,
         ).forEach { path -> runCatching { File(path).delete() } }
         runCatching { File(app.filesDir, "payloads").deleteRecursively() }
         runCatching { File(app.filesDir, "exploit.log").delete() }
@@ -561,6 +562,7 @@ class InstallViewModel(application: Application) : AndroidViewModel(application)
         private const val SHIZUKU_PAYLOAD_PATH = "/data/local/tmp/ksu-payload"
         private const val SHIZUKU_KSUD_PATH = "/data/local/tmp/ksud-s25u-kdp"
         private const val SHIZUKU_KSUD_STAGE_PATH = "/data/local/tmp/.ksud-stage"
+        private const val TEMP_SU_SOCK_PATH = "/data/local/tmp/temp_su.sock"
         private val LOG_POLL_INTERVAL = 250.milliseconds
         private val HELPER_POLL_INTERVAL = 250.milliseconds
         private val SHIZUKU_LOG_POLL_INTERVAL = 1.seconds
