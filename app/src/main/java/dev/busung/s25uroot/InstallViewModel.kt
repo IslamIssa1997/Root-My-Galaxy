@@ -317,17 +317,13 @@ class InstallViewModel(application: Application) : AndroidViewModel(application)
         if (shizukuEnabled()) {
             shizukuStage(payloads.kernelSu, SHIZUKU_KSUD_PATH, "755")
             shizukuStage(payloads.kernelSu, SHIZUKU_KSUD_STAGE_PATH, "755")
-            ShizukuController.exec(arrayOf("rm", "-f", KSUD_INSTALL_PATH)).waitFor()
-            shizukuStage(payloads.kernelSu, KSUD_INSTALL_PATH, "755")
             appendLog(app.getString(R.string.log_ksu_staged))
         } else {
             val source = shellQuote(payloads.kernelSu.absolutePath)
             val stageCommand =
                 "/system/bin/cp $source $SHIZUKU_KSUD_PATH && " +
                     "/system/bin/cp $source $SHIZUKU_KSUD_STAGE_PATH && " +
-                    "rm -f $KSUD_INSTALL_PATH && " +
-                    "/system/bin/cp $source $KSUD_INSTALL_PATH && " +
-                    "/system/bin/chmod 755 $SHIZUKU_KSUD_PATH $SHIZUKU_KSUD_STAGE_PATH $KSUD_INSTALL_PATH"
+                    "/system/bin/chmod 755 $SHIZUKU_KSUD_PATH $SHIZUKU_KSUD_STAGE_PATH"
             val stage = runHelper("-c", stageCommand)
             require(stage.code == 0) { app.getString(R.string.error_ksu_stage, stage.output) }
             appendLog(app.getString(R.string.log_ksu_staged))
@@ -567,7 +563,6 @@ class InstallViewModel(application: Application) : AndroidViewModel(application)
         private const val SHIZUKU_KSUD_PATH = "/data/local/tmp/ksud-s25u-kdp"
         private const val SHIZUKU_KSUD_STAGE_PATH = "/data/local/tmp/.ksud-stage"
         private const val TEMP_SU_SOCK_PATH = "/data/local/tmp/temp_su.sock"
-        private const val KSUD_INSTALL_PATH = "/data/adb/ksud"
         private val LOG_POLL_INTERVAL = 250.milliseconds
         private val HELPER_POLL_INTERVAL = 250.milliseconds
         private val SHIZUKU_LOG_POLL_INTERVAL = 1.seconds
