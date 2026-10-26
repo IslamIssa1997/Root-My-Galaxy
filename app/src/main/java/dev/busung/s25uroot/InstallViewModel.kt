@@ -341,23 +341,9 @@ class InstallViewModel(application: Application) : AndroidViewModel(application)
             app.getString(R.string.error_ksu_verify, lateLoad.code, lateLoad.output)
         }
         if (lateLoad.output.isNotBlank()) appendLog(lateLoad.output)
-        patchManagerKsud()
         storeInstallReceipt()
         restartAdbd()
         appendLog(app.getString(R.string.log_ksu_control_verified))
-    }
-
-    private suspend fun patchManagerKsud() {
-        val patchCmd =
-            "for f in \$(find /data/app -name libksud.so 2>/dev/null); do " +
-                "cp $SHIZUKU_KSUD_PATH \"\$f\" && " +
-                "chmod 755 \"\$f\" && " +
-                "echo \"patched: \$f\"; " +
-                "done"
-        val result = runHelper("-c", patchCmd)
-        if (result.output.isNotBlank()) {
-            appendLog("[*] Manager ksud patched: ${result.output.trim()}")
-        }
     }
 
     private fun detectInstalled(): Boolean {
