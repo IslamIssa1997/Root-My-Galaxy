@@ -343,11 +343,6 @@ class InstallViewModel(application: Application) : AndroidViewModel(application)
         if (lateLoad.output.isNotBlank()) appendLog(lateLoad.output)
         storeInstallReceipt()
         appendLog(app.getString(R.string.log_ksu_control_verified))
-
-        runHelper("-c",
-            "rm -f $SHIZUKU_KSUD_PATH $SHIZUKU_KSUD_STAGE_PATH " +
-                "$SHIZUKU_PAYLOAD_PATH $SHIZUKU_HELPER_PATH $SHIZUKU_LOG_PATH $TEMP_SU_SOCK_PATH"
-        )
     }
 
     private fun detectInstalled(): Boolean {
