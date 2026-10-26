@@ -34,7 +34,10 @@ class PayloadRepository(private val context: Context) {
         ?: error(context.getString(R.string.repo_profile_missing, profileId))
 
     fun download(profile: TargetProfile, onProgress: (String) -> Unit): VerifiedPayloads {
-        val directory = File(context.filesDir, "payloads/${profile.profileId}").apply { mkdirs() }
+        val directory = File(context.filesDir, "payloads/${profile.profileId}").apply {
+            if (exists()) deleteRecursively()
+            mkdirs()
+        }
         val exploit = downloadArtifact(
             profile.exploit,
             File(directory, "cve-2026-43499-app.so"),
@@ -128,10 +131,12 @@ class PayloadRepository(private val context: Context) {
 
     private fun open(url: String): HttpURLConnection =
         (URL(url).openConnection() as HttpURLConnection).apply {
+            useCaches = false
             connectTimeout = 15_000
             readTimeout = 60_000
             instanceFollowRedirects = true
             setRequestProperty("User-Agent", "S25URoot/${BuildConfig.VERSION_NAME}")
+            setRequestProperty("Cache-Control", "no-cache, no-store")
             connect()
             require(responseCode == HttpURLConnection.HTTP_OK) { "HTTP $responseCode" }
         }
